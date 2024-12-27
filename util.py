@@ -5,12 +5,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
+from flask import Flask, render_template
 
 
 def initialise_driver():
     global driver
     service = Service("../chromedriver-win64/chromedriver.exe")
-    driver = webdriver.Chrome(service=service)
+    driver = webdriver.Chrome()
 
 
 def end_of_page(scrollable_div):
@@ -176,7 +177,7 @@ def add_leads(niche, location, number_of_leads, excel_location):
             except Exception as e:
                 print(f"Error processing link {link}: {e}")
 
-        print(leads_data)
+        return leads_data
 
     # work on going on each link in hrefs and getting storing infromation
     finally:
@@ -193,3 +194,16 @@ def add_leads(niche, location, number_of_leads, excel_location):
 
     new_df = existing_df | leads_dict
     new_df.to_excel(excel_location, index=False)
+
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def getleads():
+    leads = add_leads("electrician", "ealing", 10, "")
+    print("Leads:", leads)
+    return render_template('index.html', leads=leads)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
