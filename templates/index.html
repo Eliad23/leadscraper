@@ -6,18 +6,29 @@
     <title>Lead Scraper</title>
 </head>
 <body>
-    <h1>Your leads!:</h1>
-    {% if leads %}
-        <ul>
-        {% for company_name, details in leads.items() %}
-            <li>
-                <strong>{{ company_name }}</strong><br>
-                <em>Phone: {{ details[0] }}</em><br>
-                <a href="{{ details[1] }}" target="_blank">Company Link</a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No leads found</p>
-    {% endif %}
+    <h1>Get your leads g</h1>
+    <form action="/leads" method="POST">
+        <p>
+            <input type="text" name="niche" id="niche" placeholder="Niche">
+        </p>
+    
+        <p>
+            <input type="text" name="location" id="location" placeholder="Location">
+        </p>
+    
+        <p>
+            <input type="number" name="amount" id="amount" placeholder="Amount of leads">
+        </p>
+    
+        {% if errors %}
+        <div class = "errors-class" style="color:red">
+            {{errors}}
+        </div>
+        {% endif %}
+    
+        <p>
+            <input type="submit" value="submit" class="submit-button">
+        </p>
+        <br>
+    </form>
 </body>

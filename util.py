@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 
 def initialise_driver():
@@ -199,10 +199,27 @@ def add_leads(niche, location, number_of_leads, excel_location):
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
+def render_page():
+    return render_template('index.html')
+
+@app.route('/leads', methods=['POST'])
 def getleads():
-    leads = add_leads("builder", "london", 30, "")
-    print("Leads:", leads)
-    return render_template('index.html', leads=leads)
+    niche = request.form['niche']
+    location = request.form['location']
+    amountofleads = request.form['amount']
+
+    return redirect(url_for("display_leads", niche=niche, location=location, amountofleads=amountofleads))
+
+@app.route("/display_leads", methods=['GET'])
+def display_leads():
+    niche = request.args.get('niche', '')
+    location = request.args.get('location', '')
+    amount = request.args.get('amount', 0)
+
+    leads = add_leads(niche, location, amount, "")
+
+    return render_template('leads.html', leads=leads)
+
 
 
 if __name__ == '__main__':
