@@ -7,5 +7,17 @@
 </head>
 <body>
     <h1>Your leads!:</h1>
-    <p>{{ leads }}</p>
+    {% if leads %}
+        <ul>
+        {% for company_name, details in leads.items() %}
+            <li>
+                <strong>{{ company_name }}</strong><br>
+                <em>Phone: {{ details[0] }}</em><br>
+                <a href="{{ details[1] }}" target="_blank">Company Link</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No leads found</p>
+    {% endif %}
 </body>

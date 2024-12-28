@@ -200,7 +200,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def getleads():
-    leads = add_leads("electrician", "ealing", 10, "")
+    leads = add_leads("builder", "london", 30, "")
     print("Leads:", leads)
     return render_template('index.html', leads=leads)
 
